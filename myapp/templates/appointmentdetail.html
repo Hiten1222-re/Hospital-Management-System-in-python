@@ -1,0 +1,163 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+<style>
+    /* Style for all <h4> tags */
+h4 {
+    color: white; /* Text color */
+    background-color: #0056b3; /* Button blue background color */
+    padding: 10px 15px; /* Add padding for a button-like feel */
+    border-radius: 5px; /* Rounded corners like a button */
+    text-transform: uppercase; /* Optional: Make text uppercase */
+    text-align: center; /* Center-align the text */
+    font-size: 1.2rem; /* Adjust font size */
+    display: inline-block; /* Optional: Makes it fit content width */
+}
+
+</style>
+
+        <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Appointment Details</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li><a href="/appoint">Appointment</a></li>
+                                        <li>View Details</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">Doctor's Dashboard</h2>
+        <p class="text-muted">Manage all patient details in one place.</p>
+    </div>
+
+    <!-- Appointment Details Section -->
+    <div class="card shadow-sm mb-4">
+        <div>
+            <h4>Appointment Details</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>User:</strong> {{ appointment.user.name }}</p>
+            <p><strong>Scheduled Date:</strong> {{ appointment.schedule.date }}</p>
+            <p><strong>Scheduled Time:</strong> {{ appointment.schedule.start_time }} - {{ appointment.schedule.end_time }}</p>
+            <p>
+                <strong>Status:</strong>
+                {% if appointment.status == 1 %}
+                    <span class="btn btn-success btn-sm">Confirmed</span>
+                {% else %}
+                    <span class="btn btn-danger btn-sm">Cancelled</span>
+                {% endif %}
+            </p>
+            <p><strong>Consultation Notes:</strong> {{ appointment.consultation_notes }}</p>
+        </div>
+    </div>
+
+    <!-- Insurance Details Section -->
+    <div class="card shadow-sm mb-4">
+        <div>
+            <h4>Insurance Details</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Insurance Type:</strong> {{ insurance.insurance_type }}</p>
+            <p><strong>Provider:</strong> {{ insurance.insurance_provider }}</p>
+            <p><strong>Coverage:</strong> {{ insurance.coverage }}</p>
+            <p>
+                <strong>Insurance Document:</strong>
+                <a href="{{ insurance.insurance_doc.url }}" class="btn btn-link" download>Download Document</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Treatments Section -->
+    <div class="card shadow-sm mb-4">
+        <div>
+            <h4>Treatment History</h4>
+        </div>
+        <div class="card-body">
+            {% for treatment in treatments %}
+            <div class="mb-3 border-bottom pb-2">
+                <p><strong>Date:</strong> {{ treatment.treatment_date }}</p>
+                <p><strong>Fees:</strong> {{ treatment.treatment_fees }}</p>
+                <p><strong>Suggestion:</strong> {{ treatment.suggestion }}</p>
+            </div>
+            {% empty %}
+            <p class="text-muted">No treatments found for this user.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Prescriptions Section -->
+    <div class="card shadow-sm mb-4">
+        <div >
+            <h4>Prescription History</h4>
+        </div>
+        <div class="card-body">
+            {% for prescription in prescriptions %}
+            <div class="mb-3 border-bottom pb-2">
+                <p><strong>Date Issued:</strong> {{ prescription.issue_date }}</p>
+                <p><strong>Medication:</strong> {{ prescription.medication_detail }}</p>
+                <p><strong>Dosage Instructions:</strong> {{ prescription.dosage_instructions }}</p>
+            </div>
+            {% empty %}
+            <p class="text-muted">No prescriptions found for this user.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Treatment Form Section -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div>
+                    <h4>Provide Treatment</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'doctor_add_treatment' user.id %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="treatment_fees" class="form-label">Treatment Fees</label>
+                            <input type="number" class="form-control" id="treatment_fees" name="treatment_fees" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="suggestion" class="form-label">Suggestion</label>
+                            <textarea class="form-control" id="suggestion" name="suggestion" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Submit Treatment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prescription Form Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div>
+                    <h4>Provide Prescription</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'doctor_add_prescription' user.id %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="medication_detail" class="form-label">Medication Detail</label>
+                            <input type="text" class="form-control" id="medication_detail" name="medication_detail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dosage_instructions" class="form-label">Dosage Instructions</label>
+                            <textarea class="form-control" id="dosage_instructions" name="dosage_instructions" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Submit Prescription</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+     {%endblock%}

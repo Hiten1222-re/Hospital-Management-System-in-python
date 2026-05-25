@@ -1,0 +1,183 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+        <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Insurance</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="home-medical-clinic.html">Home</a></li>
+                                        <li>Insurance</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+
+
+<section class="user-detail">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="user-detail-content border shadow-sm p-4 rounded bg-white">
+                    <h3 class="text-center mb-4 text-primary">Insurance</h3>
+                    <p class="text-center text-muted mb-4">Please fill in your details to continue</p>
+                    <form method="POST" action="{% url 'add_insurance' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Insurance Type -->
+    <div class="form-group mb-3">
+        <label for="insurance_type">Insurance Type <span class="text-danger">*</span></label>
+        <input
+            type="text"
+            id="insurance_type"
+            name="insurance_type"
+            class="form-control rounded-pill"
+            placeholder="Enter insurance type"
+            required
+            oninput="
+                const insuranceType = this.value.trim();
+                if (insuranceType.length < 3) {
+                    this.setCustomValidity('Insurance type must be at least 3 characters long');
+                    this.reportValidity();
+                } else {
+                    this.setCustomValidity('');
+                    this.reportValidity();
+                }
+            ">
+    </div>
+
+    <!-- Insurance Provider -->
+    <div class="form-group mb-3">
+        <label for="insurance_provider">Insurance Provider <span class="text-danger">*</span></label>
+        <input
+            type="text"
+            id="insurance_provider"
+            name="insurance_provider"
+            class="form-control rounded-pill"
+            placeholder="Enter insurance provider"
+            required
+            oninput="
+                const provider = this.value.trim();
+                if (provider.length < 3) {
+                    this.setCustomValidity('Insurance provider must be at least 3 characters long');
+                    this.reportValidity();
+                } else {
+                    this.setCustomValidity('');
+                    this.reportValidity();
+                }
+            ">
+    </div>
+
+    <!-- Coverage -->
+    <div class="form-group mb-3">
+        <label for="coverage">Coverage <span class="text-danger">*</span></label>
+        <input
+            type="text"
+            id="coverage"
+            name="coverage"
+            class="form-control rounded-pill"
+            placeholder="Enter coverage details"
+            required
+            oninput="
+                const coverage = this.value.trim();
+                if (coverage.length < 2) {
+                    this.setCustomValidity('Coverage must be at least 2 characters long');
+                    this.reportValidity();
+                } else {
+                    this.setCustomValidity('');
+                    this.reportValidity();
+                }
+            ">
+    </div>
+
+    <!-- Policy Number -->
+    <div class="form-group mb-3">
+        <label for="policy_number">Policy Number <span class="text-danger">*</span></label>
+        <input
+            type="text"
+            id="policy_number"
+            name="policy_number"
+            class="form-control rounded-pill"
+            placeholder="Enter policy number"
+            required
+            oninput="
+                const policyNumber = this.value.trim();
+                if (!/^\d+$/.test(policyNumber)) {
+                    this.setCustomValidity('Policy number must be numeric');
+                    this.reportValidity();
+                } else {
+                    this.setCustomValidity('');
+                    this.reportValidity();
+                }
+            ">
+    </div>
+
+    <!-- Validity Start Date -->
+    <div class="form-group mb-3">
+        <label for="validity_start">Validity Start Date <span class="text-danger">*</span></label>
+        <input
+            type="date"
+            id="validity_start"
+            name="validity_start"
+            class="form-control rounded-pill"
+            required>
+    </div>
+
+    <!-- Validity End Date -->
+    <div class="form-group mb-3">
+        <label for="validity_end">Validity End Date <span class="text-danger">*</span></label>
+        <input
+            type="date"
+            id="validity_end"
+            name="validity_end"
+            class="form-control rounded-pill"
+            required
+            oninput="
+                const startDate = document.getElementById('validity_start').value;
+                const endDate = this.value;
+                if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
+                    this.setCustomValidity('End date must be after the start date');
+                    this.reportValidity();
+                } else {
+                    this.setCustomValidity('');
+                    this.reportValidity();
+                }
+            ">
+    </div>
+
+    <!-- Insurance File -->
+    <div class="form-group mb-3">
+        <label for="insurance_file">Insurance File (Optional)</label>
+        <input
+            type="file"
+            id="insurance_file"
+            name="insurance_file"
+            class="form-control-file"
+            accept="image/*,application/pdf">
+    </div>
+
+    <!-- Status -->
+    <div class="form-group mb-3">
+        <label for="status">Status <span class="text-danger">*</span></label>
+        <select id="status" name="status" class="form-control rounded-pill" required>
+            <option value="Active">Active</option>
+            <option value="Expired">Expired</option>
+        </select>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-block py-2 rounded-pill">Submit</button>
+    </div>
+</form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{%endblock%}

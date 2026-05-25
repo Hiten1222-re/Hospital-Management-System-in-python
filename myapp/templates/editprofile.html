@@ -1,0 +1,68 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+        <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Patient Details</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Update Patient Details</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+<section class="user-detail">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="user-detail-content border shadow-sm p-4 rounded bg-white">
+                    <h3 class="text-center mb-4 text-primary">Patient Profile</h3>
+                    <p class="text-center text-muted mb-4">Please fill in your details to continue</p>
+                    <form method="POST" action="/update" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <label for="disease">Disease:</label>
+                        <input type="text" id="disease" name="disease" value="{{data.disease}}" required>
+                        <br><br>
+
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" value="{{data.address}}"required>
+                        <br><br>
+
+                        <label for="gender">Gender:</label>
+                        <select id="gender" name="gender">
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                            <option value="3">Other</option>
+                        </select>
+                        <br><br>
+
+                        <label for="profession">Profession:</label>
+                        <input type="text" id="profession" name="profession"  value="{{data.profession}}" required>
+                        <br><br>
+
+                        <label for="bio">Bio:</label>
+                        <textarea id="bio" name="bio" rows="4">{{data.bio}}</textarea>
+                        <br><br>
+
+                        <label for="blood_type">Blood Type:</label>
+                        <input type="text" id="blood_type" name="blood_type" value="{{data.blood_type}}" required>
+                        <br><br>
+
+                        <label for="userprofile_image">Profile Image:</label>
+                        <input type="file" id="userprofile_image" name="userprofile_image">
+                        <br><br>
+
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{%endblock%}

@@ -1,0 +1,166 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+<style>
+.custom-form {
+    background-color: #ffffff;
+    padding: 20px 40px;
+    margin: 100px 0px 100px 670px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+.custom-form-input {
+    margin-bottom: 20px;
+}
+
+.custom-form-input label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.custom-form-input input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.custom-form-input input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}
+
+.custom-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.custom-btn.primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.custom-btn.primary:hover {
+    background-color: #0056b3;
+}
+
+.custom-btn.secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+</style>
+
+
+  <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Schedule</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Add Schedule </li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+<form method="post" action="{% url 'add_time_slot' %}" class="custom-form">
+    <h2 class="form-title">Time Slot</h2>
+    {% csrf_token %}
+
+    <div id="slot-container">
+        <div class="slot-group">
+            
+            <div class="custom-form-input">
+                <label>Date:</label>
+                <input type="date" name="dates[]" required onchange="handleDateChange(this)">
+            </div>
+
+            <div class="custom-form-input">
+                <label>Start Time:</label>
+                <input type="time" name="start_times[]" required disabled>
+            </div>
+
+            <div class="custom-form-input">
+                <label>End Time:</label>
+                <input type="time" name="end_times[]" required disabled>
+            </div>
+
+        </div>
+    </div>
+
+    <button type="button" class="custom-btn secondary" onclick="addSlot()">Add Another Slot</button>
+    <br><br>
+    <button type="submit" class="custom-btn primary">Add Time Slots</button>
+</form>
+
+<script>
+    // Set min date for date input
+    function setMinDate() {
+        const today = new Date().toISOString().split('T')[0];  // Get today's date in yyyy-mm-dd format
+        document.querySelectorAll('input[type="date"]').forEach(input => {
+            input.setAttribute('min', today);
+        });
+    }
+
+    // Handle date changes
+    function handleDateChange(dateInput) {
+        const slotGroup = dateInput.closest('.slot-group');
+        const startTimeInput = slotGroup.querySelector('input[name="start_times[]"]');
+        const endTimeInput = slotGroup.querySelector('input[name="end_times[]"]');
+        const selectedDate = new Date(dateInput.value);
+        const today = new Date();
+
+        // Enable time inputs
+        startTimeInput.removeAttribute('disabled');
+        endTimeInput.removeAttribute('disabled');
+
+        // If the selected date is today, restrict the start time to current time
+        if (selectedDate.toDateString() === today.toDateString()) {
+            const currentTime = today.toISOString().split('T')[1].slice(0, 5);  // Get current time in HH:MM format
+            startTimeInput.setAttribute('min', currentTime);
+        } else {
+            // Reset min time for future dates
+            startTimeInput.removeAttribute('min');
+        }
+    }
+
+    // Add new slot dynamically
+    function addSlot() {
+        let container = document.getElementById('slot-container');
+        let newSlot = document.createElement('div');
+        newSlot.className = 'slot-group';
+        newSlot.innerHTML = `
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" class="form-control" name="dates[]" min="" required onchange="handleDateChange(this)">
+            </div>
+            <div class="form-group">
+                <label for="start_time">Start Time:</label>
+                <input type="time" class="form-control" name="start_times[]" required disabled>
+            </div>
+            <div class="form-group">
+                <label for="end_time">End Time:</label>
+                <input type="time" class="form-control" name="end_times[]" required disabled>
+            </div>
+        `;
+        container.appendChild(newSlot);
+        setMinDate();  // Set min date for the new slot
+    }
+
+    // Set min date on page load
+    document.addEventListener('DOMContentLoaded', setMinDate);
+</script>
+
+{%endblock%}

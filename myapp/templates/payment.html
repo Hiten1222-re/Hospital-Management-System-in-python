@@ -1,0 +1,56 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+        <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Payment</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Payment</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+<br><br><br>
+
+<form id="payment_form" method="POST" action="{% url 'payment_success' %}">
+    {% csrf_token %}
+    <input type="hidden" id="razorpay_payment_id" name="razorpay_payment_id">
+    <input type="hidden" id="razorpay_order_id" name="razorpay_order_id">
+    <input type="hidden" id="razorpay_signature" name="razorpay_signature">
+</form>
+
+<button id="pay-button">Pay with Razorpay</button>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    "key": "{{ razorpay_payment.razorpay_key_id }}",
+    "amount": "{{ razorpay_payment.amount|floatformat:0 }}00",
+    "currency": "{{ razorpay_payment.currency }}",
+    "order_id": "{{ razorpay_payment.razorpay_order_id }}",
+    "name": "Payment",
+    "description": "Payment for purchase",
+    "image": "https://example.com/your_logo.jpg",
+    "handler": function (response) {
+        console.log(response);  // Ensure this logs the payment response
+        document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+        document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+        document.getElementById('razorpay_signature').value = response.razorpay_signature;
+        document.getElementById('payment_form').submit();
+    }
+  };
+
+  var rzp1 = new Razorpay(options);
+  document.getElementById('pay-button').onclick = function(e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+</script>
+
+
+
+     {%endblock%}

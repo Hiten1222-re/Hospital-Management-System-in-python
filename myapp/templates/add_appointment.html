@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block main %}
+{% load static %}
+{% include 'messages.html' %}
+
+
+<div class="breadcumb-wrapper" data-bg-src="{% static 'assets/img/bg/breadcumb-bg.jpg' %}">
+    <div class="container">
+        <div class="breadcumb-content">
+            <h1 class="breadcumb-title">Add Appointment</h1>
+            <ul class="breadcumb-menu">
+                <li><a href="/">Home</a></li>
+                <li>Add Appointment</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+<section class="appointment-section">
+    <div class="container">
+        <div class="card shadow p-4" style="border-radius: 12px;">
+            <h5 class="mb-3">Book Appointment</h5>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Doctor</label>
+                    <select name="doctor" id="doctor-select" class="form-control" required>
+                        <option value="">Select Doctor</option>
+                        {% for doctor in doctors %}
+                        <option value="{{ doctor.user.id }}">{{ doctor.user.name }}
+                            {{doctor.department.department_name}}</option>
+                        {% endfor %}
+                    </select>
+
+
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">User</label>
+                    <input type="text" value="{{user.name}}" class="form-control" disabled>
+                    <input type="hidden" name="user" value="{{ user.name }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Schedule</label>
+                    <select id="schedule-select" class="form-control mt-2" name="schedule">
+                        <option value="">Select Schedule</option>
+                    </select>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-4">Submit Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('doctor-select').addEventListener('change', function () {
+        const doctorId = this.value;
+        const scheduleSelect = document.getElementById('schedule-select');
+        scheduleSelect.innerHTML = '<option>Loading...</option>';
+
+        if (!doctorId) {
+            scheduleSelect.innerHTML = '<option>Select Schedule</option>';
+            return;
+        }
+
+        fetch(`/get-schedules/?doctor_id=${doctorId}`)
+            .then(response => response.json())
+            .then(data => {
+                scheduleSelect.innerHTML = '<option value="">Select Schedule</option>';
+                data.forEach(slot => {
+                    const opt = document.createElement('option');
+                    opt.value = slot.id;
+                    opt.textContent = slot.label;
+                    scheduleSelect.appendChild(opt);
+                });
+            });
+    });
+</script>
+
+<br><br>
+{% endblock %}

@@ -1,0 +1,72 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+
+<div class="breadcumb-wrapper" data-bg-src="../static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Appointment</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="home-medical-clinic.html">Home</a></li>
+                                        <li>Appointment</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+<br><br><br>
+<section class="appointments-section">
+    <div class="container">
+        <h5 class="section-title">Your Appointments</h5>
+
+        <!-- If there are appointments for the doctor -->
+        {% if appointmentdetail %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Appointment Date</th>
+                        <th>User</th>
+                        <th>Scheduled Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointmentdetail %}
+                        <tr>
+                            <td>{{ appointment.schedule.date }}</td>
+                            <td>{{ appointment.user.name }}</td>
+                            <td>{{ appointment.schedule.start_time }} - {{ appointment.schedule.end_time }}</td>
+                            <td>
+                                {% if appointment.status == 1 %}
+                                    <span class="btn btn-success btn-sm">Confirmed</span>
+                                {% else %}
+                                    <span class="btn btn-danger btn-sm">Cancelled</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'doctor_user_details' appointment.user.id %}" class="btn btn-primary btn-sm">View Details</a>
+                                <br><br>
+                                <!-- Cancel Appointment Button -->
+                                {% if appointment.status == 1 %}
+                                    <form method="POST" action="{% url 'cancel_appointment' appointment.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">Cancel Appointment</button>
+                                    </form>
+
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No appointments found.</p>
+        {% endif %}
+    </div>
+</section>
+
+<br><br>
+     {%endblock%}

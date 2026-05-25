@@ -1,0 +1,176 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+<style>
+/* Feedback form container */
+.feedback-form {
+    max-width: 600px;
+    margin: 200px 0px 30px 600px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form heading */
+.feedback-form h4 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+/* Input fields and textarea */
+.feedback-form .form-group {
+    margin-bottom: 20px;
+}
+
+.feedback-form .form-control {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.feedback-form .form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
+}
+
+/* Increase font size for feedback message textarea with higher specificity */
+.feedback-form .form-group textarea.form-control {
+    font-size: 1.5rem !important;  /* Increased font size with higher specificity */
+}
+
+/* Star rating container */
+.feedback-form .rating {
+    font-size: 2rem;
+    color: #f39c12;
+    display: block;
+    text-align: center;
+}
+
+/* Submit button styling */
+.feedback-form .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2rem;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.feedback-form .btn:hover {
+    background-color: #218838;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .feedback-form {
+        padding: 15px;
+    }
+
+    .feedback-form h4 {
+        font-size: 1.5rem;
+    }
+
+    .feedback-form .btn {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    .rating span{
+        font-size:30px !important;
+    }
+    .feedback-form textarea {
+        font-size: 2rem !important;  /* Ensure font size applies on smaller screens */
+    }
+}
+
+</style>
+<script src="https://kit.fontawesome.com/e8d41f2698.js" crossorigin="anonymous"></script>
+           <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Feedback</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Feedback</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+    <!-- BREADCRUMB AREA END -->
+<div class="feedback-form mt-5 pt-5">
+                <h4>Leave Feedback</h4>
+                <form method="post" action="/storefeedback">
+                    {% csrf_token %}
+
+                    <div class="rating" align="left">
+                    <p>Rating:
+                    <span class="fa fa-star" data-rating="1"></span>
+                    <span class="fa fa-star" data-rating="2"></span>
+                    <span class="fa fa-star" data-rating="3"></span>
+                    <span class="fa fa-star" data-rating="4"></span>
+                    <span class="fa fa-star" data-rating="5"></span>
+                    </p>
+                    <input type="hidden" name="ratings" id="rating">
+                </div>
+                    <div class="form-group">
+                        <label for="feedback_message">Feedback Message:</label>
+                        <textarea class="form-control" id="feedback_message" name="feedback_message" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Submit Feedback</button>
+                </form>
+            </div>
+
+<script>
+    // Function to handle star ratings
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.fa-star');
+
+        stars.forEach(star => star.addEventListener('click', rateStar));
+
+        function rateStar(event) {
+            const rating = event.target.getAttribute('data-rating');
+            document.getElementById('rating').value = rating;
+
+            // Add 'rated' class to all stars up to the clicked one
+            stars.forEach(star => {
+                if (parseInt(star.getAttribute('data-rating')) <= rating) {
+                    star.classList.add('text-success'); // Add text-success class to selected stars
+                    star.classList.add('rated');
+                } else {
+                    star.classList.remove('text-success'); // Remove text-success class from unselected stars
+                    star.classList.remove('rated');
+                }
+            });
+        }
+    });
+
+
+    function limitInputLength(inputElement, maxLength) {
+    var inputValue = inputElement.value.toString();
+
+    // Remove any non-numeric characters
+    inputValue = inputValue.replace(/[^0-9]/g, '');
+
+    // Truncate to the specified length
+    inputValue = inputValue.slice(0, maxLength);
+
+    // Update the input value
+    inputElement.value = inputValue;
+
+    // You can also perform additional actions or validation if needed
+  }
+</script>
+{%endblock%}

@@ -1,0 +1,84 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+
+        <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Patient Details</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Patient Details</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+        <section class="space">
+                <div class="container">
+                        <div class="row gy-40">
+                                <div class="col-xl-4 position-relative">
+                                        <div class="team-sticky">
+                                                <div class="about-box mb-40">
+                                                        <div class="box-img"><img src="{{alldetail.userprofile_image.url}}"
+                                                                        alt="team image"></div>
+                                                        <div class="box-content">
+                                                                <h3 class="box-title">{{alldetail.user.name}}</h3>
+                                                        </div>
+                                                </div>
+                                                <div class="about-box">
+                                                        <div class="box-content">
+                                                                <h3 class="box-title">Personal Information</h3>
+                                                                <p class="box-link"><i
+                                                                                class="icon-btn fas fa-phone"></i> <a
+                                                                                href="tel:+16365478974">{{alldetail.user.phone}}</a></p>
+                                                                <p class="box-link"><i
+                                                                                class="icon-btn fas fa-envelope"></i> <a
+                                                                                href="mailto:dr.douglaslyphe@gmail.com">{{alldetail.user.email}}</a>
+                                                                </p>
+                                                                <p class="box-link"><i
+                                                                                class="icon-btn fas fa-location-dot"></i>
+                                                                        12546 LK Road, United States</p>
+                                                                <p class="box-link"><i
+                                                                                class="icon-btn fas fa-stethoscope"></i>
+                                                                        22+ Years</p>
+                                                                <div class="th-social"><a
+                                                                                href="https://www.facebook.com/"><i
+                                                                                        class="fab fa-facebook-f"></i></a>
+                                                                        <a href="https://www.twitter.com/"><i
+                                                                                        class="fab fa-twitter"></i></a>
+                                                                        <a href="https://www.linkedin.com/"><i
+                                                                                        class="fab fa-linkedin-in"></i></a>
+                                                                        <a href="https://www.whatsapp.com/"><i
+                                                                                        class="fab fa-whatsapp"></i></a>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                                <div class="col-xl-8">
+                                        <div class="team-details">
+                                                <h2 class="sec-title mb-4">Introduction</h2>
+                                                <p class="mb-20">{{alldetail.bio}}</p>
+
+                                                <h4 class="sec-title mb-4 mt-40">Profession</h4>
+                                                <p class="mb-4">{{alldetail.profession}}</p>
+
+                                                <h4 class="sec-title mb-4 mt-40">Blood Type</h4>
+                                                <p class="mb-4">{{alldetail.blood_type}}</p>
+
+                                                <h4 class="sec-title mb-4 mt-40">Disease</h4>
+                                                <p class="mb-4">{{alldetail.disease}}</p>
+
+                                                <div class="edit-btn text-center mt-4">
+                                                <a href="/editpatientprofile" class="btn btn-primary btn-lg px-4 py-2">Edit Profile</a>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </section>
+
+{%endblock%}

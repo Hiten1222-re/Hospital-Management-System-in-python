@@ -1,0 +1,95 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+
+<div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Doctor Profile</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Doctor Profile</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+
+        <section class="space">
+                <div class="container">
+                        <div class="row gy-40">
+                                <div class="col-xl-4 position-relative">
+                                        <div class="team-sticky">
+                                                <div class="about-box mb-40">
+                                                        <div class="box-img"><img src="{{alldetail.doctorprofile_image.url}}"
+                                                                        alt="team image"></div>
+                                                        <div class="box-content">
+                                                                <h3 class="box-title">Dr. {{alldetail.user.name}}</h3>
+                                                                <p class="box-desig">{{allldetail.department.department_name}}</p>
+                                                                <p class="box-text">Our team of skilled doctors, nurses,
+                                                                        and specialists bring years of experience and
+                                                                        expertise to ensure you receive.</p>
+                                                        </div>
+                                                </div>
+                                                <div class="about-box">
+                                                        <div class="box-content">
+                                                                <h3 class="box-title">Personal Information</h3>
+                                                                <p class="box-link"><i
+                                                                                class="icon-btn fas fa-phone"></i> <a
+                                                                                href="tel:+16365478974">{{alldetail.user.phone}}</a></p>
+                                                                <p class="box-link"><i
+                                                                                class="icon-btn fas fa-envelope"></i> <a
+                                                                                href="mailto:dr.douglaslyphe@gmail.com">{{alldetail.user.email}}</a>
+                                                                </p>
+                                                                <p class="box-link"><i
+                                                                                class="icon-btn fas fa-location-dot"></i>
+                                                                        12546 LK Road, United States</p>
+                                                                <p class="box-link"><i
+                                                                                class="icon-btn fas fa-stethoscope"></i>
+                                                                        22+ Years</p>
+                                                                <div class="th-social"><a
+                                                                                href="https://www.facebook.com/"><i
+                                                                                        class="fab fa-facebook-f"></i></a>
+                                                                        <a href="https://www.twitter.com/"><i
+                                                                                        class="fab fa-twitter"></i></a>
+                                                                        <a href="https://www.linkedin.com/"><i
+                                                                                        class="fab fa-linkedin-in"></i></a>
+                                                                        <a href="https://www.whatsapp.com/"><i
+                                                                                        class="fab fa-whatsapp"></i></a>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                                <div class="col-xl-8">
+                                        <div class="team-details">
+                                                <h2 class="sec-title mb-4">Introduction</h2>
+                                                <p class="mb-20">{{alldetail.bio}}</p>
+                                                <div class="row gy-2">
+                                                        <div class="col-md-6">
+                                                                <div class="checklist body-color">
+                                                                        <ul>
+                                                                                <li><i class="fas fa-circle-arrow-right"></i><b>{{alldetail.specialization}}
+                                                                                        </b>D.N.Sc.</li>
+
+                                                                        </ul>
+                                                                </div>
+                                                        </div>
+
+                                                </div>
+                                                <h4 class="sec-title mb-4 mt-40">Timing and Fees</h4>
+                                                <p class="mb-4">Time : {{alldetail.shift_hour}}</p>
+                                                <p class="mb-4">Fees : {{alldetail.consultation_fees}}</p>
+
+                                                <div class="edit-btn text-center mt-4">
+                        <a href="/editdoctor" class="btn btn-primary btn-lg px-4 py-2">Edit Profile</a>
+                    </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </section>
+
+{%endblock%}

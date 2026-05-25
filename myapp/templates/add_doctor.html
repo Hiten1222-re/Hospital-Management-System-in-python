@@ -1,0 +1,144 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+        <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Doctor Profile</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Doctor Profile</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+
+<section class="user-detail">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="user-detail-content border shadow-sm p-4 rounded bg-white">
+                    <h3 class="text-center mb-4 text-primary">Doctor Profile</h3>
+                    <p class="text-center text-muted mb-4">Please fill in your details to continue</p>
+                    <form method="POST" action="{% url 'add_doctor_detail' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Department Selection -->
+    <label for="department">Department: <span class="text-danger">*</span></label>
+    <select name="department" id="department" required>
+        <option value="">Select a Department</option>
+        {% for department in departments %}
+            <option value="{{ department.id }}">{{ department.department_name }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <!-- Shift Hour -->
+    <label for="shift_hour">Shift Hour: <span class="text-danger">*</span></label>
+    <input
+        type="time"
+        id="shift_hour"
+        name="shift_hour"
+        required>
+    <br><br>
+
+    <!-- Consultation Fees -->
+    <label for="consultation_fees">Consultation Fees: <span class="text-danger">*</span></label>
+    <input
+        type="number"
+        id="consultation_fees"
+        name="consultation_fees"
+        min="0"
+        required
+        oninput="
+            if (this.value < 0) {
+                this.setCustomValidity('Consultation fees must be a positive value');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+                this.reportValidity();
+            }
+        ">
+    <br><br>
+
+    <!-- Specialization -->
+    <label for="specialization">Specialization: <span class="text-danger">*</span></label>
+    <input
+        type="text"
+        id="specialization"
+        name="specialization"
+        maxlength="30"
+        required
+        oninput="
+            const specialization = this.value.trim();
+            if (specialization.length < 3) {
+                this.setCustomValidity('Specialization must be at least 3 characters long');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+                this.reportValidity();
+            }
+        ">
+    <br><br>
+
+    <!-- Bio -->
+    <label for="bio">Bio:</label>
+    <textarea
+        id="bio"
+        name="bio"
+        rows="4"
+        oninput="
+            const bio = this.value.trim();
+            if (bio && bio.length < 10) {
+                this.setCustomValidity('Bio must be at least 10 characters long if provided');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+                this.reportValidity();
+            }
+        ">
+    </textarea>
+    <br><br>
+
+    <!-- Status -->
+    <label for="status">Status: <span class="text-danger">*</span></label>
+    <select id="status" name="status" required>
+        <option value="">Select Status</option>
+        <option value="0">Unavailable</option>
+        <option value="1">Available</option>
+    </select>
+    <br><br>
+
+    <!-- Profile Image -->
+    <label for="doctorprofile_image">Profile Image:</label>
+    <input
+        type="file"
+        id="doctorprofile_image"
+        name="doctorprofile_image"
+        accept="image/*"
+        oninput="
+            const file = this.files[0];
+            if (file && file.size > 2 * 1024 * 1024) {
+                this.setCustomValidity('Profile image size must not exceed 2MB');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+                this.reportValidity();
+            }
+        ">
+    <br><br>
+
+    <!-- Submit Button -->
+    <button type="submit">Submit</button>
+</form>
+
+                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{%endblock%}

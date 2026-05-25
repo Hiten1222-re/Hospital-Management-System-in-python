@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block main %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+
+                    <h3 class="text-danger mb-3">
+                        Profile Incomplete
+                    </h3>
+
+                    <p class="text-muted">
+                        To continue using our medical services, you must complete your
+                        <strong>Patient Profile</strong>.
+                    </p>
+
+                    <hr>
+
+                    <p>
+                        Please fill in your personal details such as:
+                    </p>
+
+                    <ul class="list-unstyled text-start d-inline-block">
+                        <li>✔ Disease information</li>
+                        <li>✔ Address & gender</li>
+                        <li>✔ Blood group</li>
+                        <li>✔ Profile image</li>
+                    </ul>
+
+                    <div class="mt-4">
+                        <a href="{% url 'add_patient_detail' %}" class="btn btn-primary px-4">
+                            Complete Patient Profile
+                        </a>
+                    </div>
+
+                    <div class="mt-3 text-muted small">
+                        Insurance details are optional and can be added later.
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

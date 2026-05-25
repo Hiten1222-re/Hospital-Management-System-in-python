@@ -1,0 +1,170 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+        <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Patient Profile</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Patient Profile</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+
+<td>{{ appointment.booking_date }}</td>
+                            <td>{{ appointment.user.name }}</td>
+                            <td>{{ appointment.schedule.start_time }} - {{ appointment.schedule.end_time }}</td>
+
+
+
+<section class="user-detail">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="user-detail-content border shadow-sm p-4 rounded bg-white">
+                    <h3 class="text-center mb-4 text-primary">Patient Profile</h3>
+                    <p class="text-center text-muted mb-4">Please fill in your details to continue</p>
+                    <form method="POST" action="{% url 'add_patient_detail' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Disease -->
+    <label for="disease">Disease: <span class="text-danger">*</span></label>
+    <input
+        type="text"
+        id="disease"
+        name="disease"
+        required
+        oninput="
+            const disease = this.value.trim();
+            if (disease.length < 3) {
+                this.setCustomValidity('Disease name must be at least 3 characters long');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+                this.reportValidity();
+            }
+        ">
+    <br><br>
+
+    <!-- Address -->
+    <label for="address">Address: <span class="text-danger">*</span></label>
+    <input
+        type="text"
+        id="address"
+        name="address"
+        required
+        oninput="
+            const address = this.value.trim();
+            if (address.length < 5) {
+                this.setCustomValidity('Address must be at least 5 characters long');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+                this.reportValidity();
+            }
+        ">
+    <br><br>
+
+    <!-- Gender -->
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender" required>
+        <option value="">Select Gender</option>
+        <option value="1">Male</option>
+        <option value="2">Female</option>
+        <option value="3">Other</option>
+    </select>
+    <br><br>
+
+    <!-- Profession -->
+    <label for="profession">Profession: <span class="text-danger">*</span></label>
+    <input
+        type="text"
+        id="profession"
+        name="profession"
+        required
+        oninput="
+            const profession = this.value.trim();
+            if (profession.length < 3) {
+                this.setCustomValidity('Profession must be at least 3 characters long');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+                this.reportValidity();
+            }
+        ">
+    <br><br>
+
+    <!-- Bio -->
+    <label for="bio">Bio:</label>
+    <textarea
+        id="bio"
+        name="bio"
+        rows="4"
+        oninput="
+            const bio = this.value.trim();
+            if (bio && bio.length < 10) {
+                this.setCustomValidity('Bio must be at least 10 characters long if provided');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+                this.reportValidity();
+            }
+        ">
+    </textarea>
+    <br><br>
+
+    <!-- Blood Type -->
+    <label for="blood_type">Blood Type: <span class="text-danger">*</span></label>
+    <input
+        type="text"
+        id="blood_type"
+        name="blood_type"
+        required
+        oninput="
+            const bloodType = this.value.trim();
+            if (!/^(A|B|AB|O)[+-]$/.test(bloodType)) {
+                this.setCustomValidity('Blood type must be a valid format (e.g., A+, O-, AB+)');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+                this.reportValidity();
+            }
+        ">
+    <br><br>
+
+    <!-- Profile Image -->
+    <label for="userprofile_image">Profile Image: <span class="text-danger">*</span></label>
+    <input
+        type="file"
+        id="userprofile_image"
+        name="userprofile_image"
+        accept="image/*"
+        required
+        oninput="
+            const file = this.files[0];
+            if (file && file.size > 2 * 1024 * 1024) {
+                this.setCustomValidity('Profile image size must not exceed 2MB');
+                this.reportValidity();
+            } else {
+                this.setCustomValidity('');
+                this.reportValidity();
+            }
+        ">
+    <br><br>
+
+    <!-- Submit Button -->
+    <button type="submit">Submit</button>
+</form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{%endblock%}

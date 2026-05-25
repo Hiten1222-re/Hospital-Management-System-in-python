@@ -1,0 +1,87 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+
+        <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Doctor Details</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Doctor Details</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+<section class="space">
+    <div class="container">
+        <div class="row gy-40">
+            <!-- Doctor Information Section -->
+            <div class="col-xl-4 position-relative">
+                <div class="team-sticky">
+                    <div class="about-box mb-40">
+                        <div class="box-img">
+                            <img src="{{ alldetail.doctorprofile_image.url }}" alt="team image" class="rounded-circle img-fluid" style="width: 250px; height: 250px; object-fit: cover;">
+                        </div>
+                        <div class="box-content">
+                            <h3 class="box-title">Dr. {{ alldetail.user.name }}</h3>
+                            <p class="box-desig">{{ alldetail.department.department_name }}</p>
+                            <p class="box-text">{{ alldetail.bio }}</p>
+                        </div>
+                    </div>
+                    <div class="about-box">
+                        <div class="box-content">
+                            <h3 class="box-title">Personal Information</h3>
+                            <p class="box-link"><i class="icon-btn fas fa-phone"></i> <a href="tel:+16365478974">{{ alldetail.user.phone }}</a></p>
+                            <p class="box-link"><i class="icon-btn fas fa-envelope"></i> <a href="mailto:{{ alldetail.user.email }}">{{ alldetail.user.email }}</a></p>
+                            <div class="th-social">
+                                <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                                <a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>
+                                <a href="https://www.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="https://www.whatsapp.com/"><i class="fab fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Slots Section -->
+            <div class="col-xl-8">
+                <h4 class="sec-title mb-4 mt-40">Available Slots</h4>
+                <div class="row mt-3">
+                    {% for slot in available_slots %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ slot.date }}</h5>
+                                <p class="card-text">
+                                    <strong>Start Time:</strong> {{ slot.start_time }}<br>
+                                    <strong>End Time:</strong> {{ slot.end_time }}
+                                </p>
+                                {% if not slot.is_booked %}
+                                <!-- Booking Form -->
+                                <form method="POST" action="{% url 'book_slot' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="slot_id" value="{{ slot.id }}">
+                                    <button type="submit" class="btn btn-primary">Book Now</button>
+                                </form>
+                                {% else %}
+                                <span class="badge bg-secondary">Already Booked</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center">No slots available at the moment.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{%endblock%}

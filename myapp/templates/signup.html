@@ -1,0 +1,178 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+<style>
+    .login-content {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    input.form-control {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        transition: border-color 0.3s ease;
+    }
+
+    input.form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+        outline: none;
+    }
+
+    /* Ensure visibility of radio buttons */
+    input[type="radio"] {
+        appearance: auto;
+        margin-right: 10px;
+    }
+</style>
+
+<div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+    <div class="container">
+        <div class="breadcumb-content">
+            <h1 class="breadcumb-title">Signup</h1>
+            <ul class="breadcumb-menu">
+                <li><a href="/">Home</a></li>
+                <li>Signup</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<br><br>
+<section class="register">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="login-content">
+                    <h4 class="text-center mb-4">Create Your Account</h4>
+                    <form action="/signup" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Full Name -->
+                        <div class="form-group mb-3">
+                            <label for="name1">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" id="name1" name="name1" class="form-control rounded-pill"
+                                placeholder="Enter your full name" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group mb-3">
+                            <label for="email1">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" id="email1" name="email1" class="form-control rounded-pill"
+                                placeholder="Enter your email address" required oninput=" 
+                                            const email = this.value.trim();
+                                            const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+                                            if (!gmailRegex.test(email)) {
+                                                this.setCustomValidity('Please enter a valid Gmail address');
+                                            } else {
+                                                this.setCustomValidity('');
+                                            }
+                        ">
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="form-group mb-3">
+                            <label for="phone1">Phone Number <span class="text-danger">*</span></label>
+                            <input type="text" id="phone1" name="phone1" class="form-control rounded-pill"
+                                placeholder="Enter your 10-digit phone number" required oninput="
+                                    const phoneNumber = this.value.trim();
+                                    if (!/^[0-9]{10}$/.test(phoneNumber)) {
+                                        this.setCustomValidity('Phone number must be 10 digits');
+                                        this.reportValidity();
+                                    } else {
+                                        this.setCustomValidity('');
+                                        this.reportValidity();
+                                    }
+                                ">
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group mb-3">
+                            <label for="password1">Password <span class="text-danger">*</span></label>
+                            <input type="password" id="password1" name="password1" class="form-control rounded-pill"
+                                placeholder="Enter a strong password" required oninput="
+                                    const password = this.value.trim();
+                                    const hasLowerCase = /[a-z]/.test(password);
+                                    const hasDigit = /\d/.test(password);
+                                    if (password.length < 5) {
+                                        this.setCustomValidity('Password must be at least 5 characters long');
+                                        this.reportValidity();
+                                    } else if (!hasLowerCase) {
+                                        this.setCustomValidity('Password must contain at least one lowercase letter');
+                                        this.reportValidity();
+                                    } else if (!hasDigit) {
+                                        this.setCustomValidity('Password must contain at least one digit');
+                                        this.reportValidity();
+                                    } else {
+                                        this.setCustomValidity('');
+                                        this.reportValidity();
+                                    }
+                                ">
+                        </div>
+
+                        <!-- ID Proof (Initially Hidden) -->
+                        <div class="form-group mb-3" id="id-proof-group" style="display:none;">
+                            <label for="id_proof">ID Proof <span class="text-danger">*</span></label>
+                            <input type="file" id="id_proof" name="id_proof1" class="form-control-file" accept="image/*"
+                                required>
+                        </div>
+
+                        <!-- User Type -->
+                        <div class="form-group mb-3">
+                            <label>User Type <span class="text-danger">*</span></label>
+                            <div class="form-check">
+                                <input type="radio" id="vendor_radio" name="usertype" value="Doctor"
+                                    class="form-check-input" required>
+                                <label for="vendor_radio" class="form-check-label">Doctor</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="user_radio" name="usertype" value="User"
+                                    class="form-check-input" required>
+                                <label for="user_radio" class="form-check-label">User</label>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-block py-2 rounded-pill">
+                                Register
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Show ID proof input when either User or Vendor is selected
+    document.querySelectorAll('input[name="usertype"]').forEach(input => {
+        input.addEventListener('change', function () {
+            const idProofGroup = document.getElementById('id-proof-group');
+            if (this.value === 'User' || this.value === 'Doctor') {
+                idProofGroup.style.display = 'block'; // Show ID proof input
+            } else {
+                idProofGroup.style.display = 'none'; // Hide ID proof input
+            }
+        });
+    });
+</script>
+
+<br><br><br>
+
+
+{%endblock%}

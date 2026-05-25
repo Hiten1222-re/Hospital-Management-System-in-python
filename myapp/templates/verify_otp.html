@@ -1,0 +1,141 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+<style>
+    /* General form styles */
+.login-content {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+input.form-control {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease;
+}
+
+input.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+    outline: none;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+    .login-content {
+        padding: 30px 20px;
+    }
+}
+
+</style>
+
+        <div class="breadcumb-wrapper" data-bg-src="static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Login</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Login</li>
+                                        <li>Forget Password</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+<section class="login">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="login-content border shadow-sm p-4 rounded bg-white">
+                    <h3 class="text-center mb-4 text-primary">Enter OTP</h3>
+                    <p class="text-center text-muted mb-4">We sent a 4-digit code to your email account.
+Please enter it below.</p>
+                    <form action="/verify_otp" method="post">
+                        {% csrf_token %}
+
+                        <!-- OTP Boxes -->
+                        <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 24px;">
+                            {% for i in "1234" %}
+                            <input
+                                type="text"
+                                maxlength="1"
+                                inputmode="numeric"
+                                pattern="[0-9]"
+                                name="otp[]"
+                                class="otp-box"
+                                
+                                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.15)';"
+                                onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"
+                            >
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-block w-100 py-2 rounded-pill shadow">
+                                Check OTP
+                            </button>
+                        </div>
+
+                        <!-- Sign Up Link -->
+                        <p class="text-center text-muted mt-4">Didn't receive the code?
+                            <a href="{% url 'forget' %}" class="text-primary text-decoration-none">Resend Otp</a>
+                        </p>
+
+                         <!-- Timer -->
+                    <p class="text-center mt-2 mb-0" style="font-size:0.88rem; color:#9ca3af;">
+                        Code expires in <span id="timer" style="color:#2563eb; font-weight:600;">10:00</span>
+                    </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+const boxes = document.querySelectorAll('.otp-box');
+boxes.forEach((box, i) => {
+    box.addEventListener('input', () => {
+        box.value = box.value.replace(/[^0-9]/g, '');
+        if (box.value && i < boxes.length - 1) boxes[i + 1].focus();
+    });
+    box.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !box.value && i > 0) boxes[i - 1].focus();
+    });
+    box.addEventListener('paste', e => {
+        e.preventDefault();
+        const data = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+        [...data].forEach((ch, idx) => { if (boxes[idx]) boxes[idx].value = ch; });
+        if (boxes[data.length - 1]) boxes[data.length - 1].focus();
+    });
+});
+
+// ── Countdown timer ──
+let seconds = 600;
+const timerEl = document.getElementById('timer');
+const interval = setInterval(() => {
+    seconds--;
+    if (seconds <= 0) { clearInterval(interval); timerEl.textContent = 'Expired'; timerEl.style.color='#ef4444'; return; }
+    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    timerEl.textContent = `${m}:${s}`;
+}, 1000);
+</script>
+
+    {%endblock%}

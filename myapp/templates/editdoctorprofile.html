@@ -1,0 +1,84 @@
+{%extends 'base.html'%}
+{%block main%}
+{%load static%}
+{%include 'messages.html'%}
+
+
+
+        <div class="breadcumb-wrapper" data-bg-src="/../../../../static/assets/img/bg/breadcumb-bg.jpg">
+                <div class="container">
+                        <div class="breadcumb-content">
+                                <h1 class="breadcumb-title">Doctor Details</h1>
+                                <ul class="breadcumb-menu">
+                                        <li><a href="/">Home</a></li>
+                                        <li>Update Doctor Details</li>
+                                </ul>
+                        </div>
+                </div>
+        </div>
+
+<section class="user-detail">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="user-detail-content border shadow-sm p-4 rounded bg-white">
+                    <h3 class="text-center mb-4 text-primary">Doctor Profile</h3>
+                    <p class="text-center text-muted mb-4">Please fill in your details to continue</p>
+                    <form method="POST" action="/updatedoctor" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Department Selection -->
+    <label for="department">Department:</label>
+    <select name="department" id="department" required>
+        {% for department in departments %}
+            <option value="{{ department.id }}" {% if department.id == data.department.id %}selected{% endif %}>
+                {{ department.department_name }}
+            </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <!-- Shift Hour -->
+    <label for="shift_hour">Shift Hour:</label>
+    <input type="time" id="shift_hour" name="shift_hour" value="{{ data.shift_hour|date:'H:i' }}" required>
+    <br><br>
+
+    <!-- Consultation Fees -->
+    <label for="consultation_fees">Consultation Fees:</label>
+    <input type="number" id="consultation_fees" name="consultation_fees" value="{{ data.consultation_fees }}" required>
+    <br><br>
+
+    <!-- Specialization -->
+    <label for="specialization">Specialization:</label>
+    <input type="text" id="specialization" name="specialization" maxlength="30" value="{{ data.specialization }}" required>
+    <br><br>
+
+    <!-- Bio -->
+    <label for="bio">Bio:</label>
+    <textarea id="bio" name="bio" rows="4">{{ data.bio }}</textarea>
+    <br><br>
+
+    <!-- Status -->
+    <label for="status">Status:</label>
+    <select id="status" name="status" required>
+        <option value="0" {% if data.status == 0 %}selected{% endif %}>Unavailable</option>
+        <option value="1" {% if data.status == 1 %}selected{% endif %}>Available</option>
+    </select>
+    <br><br>
+
+    <!-- Profile Image -->
+    <label for="doctorprofile_image">Profile Image:</label>
+    <input type="file" id="doctorprofile_image" name="doctorprofile_image">
+    <br><br>
+
+    <!-- Submit Button -->
+    <button type="submit">Submit</button>
+</form>
+
+                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{%endblock%}
